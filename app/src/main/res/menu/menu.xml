@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item1"
+        android:icon="@drawable/ic_filter_list"
+        android:title="item 1"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/trier_par_salle"
+                android:title="Trier par Salle"/>
+
+            <item
+                android:id="@+id/trier_par_date"
+                android:title="Trier par Date"/>
+        </menu>
+    </item>
+</menu>

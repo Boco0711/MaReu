@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:paddingTop="@dimen/padding_scrollview"
+            android:paddingBottom="@dimen/padding_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
+
+            <TextView
+                android:id="@+id/edit_meeting_room"
+                android:hint="@string/salle_de_reunion"
+                android:textSize="@dimen/size_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height" />
+            <TextView
+                android:id="@+id/edit_meeting_date"
+                android:hint="@string/date_de_la_reunion"
+                android:textSize="@dimen/size_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height"
+                android:layout_marginTop="@dimen/margin_text" />
+
+            <TextView
+                android:id="@+id/edit_meeting_start_hour"
+                android:hint="@string/heure_de_debut"
+                android:textSize="@dimen/size_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height"
+                android:layout_marginTop="@dimen/margin_text"/>
+
+            <TextView
+                android:id="@+id/edit_meeting_end_hour"
+                android:hint="@string/heure_de_fin"
+                android:textSize="@dimen/size_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height"
+                android:layout_marginTop="@dimen/margin_text"/>
+
+            <EditText
+                android:id="@+id/edit_meeting_subject"
+                android:hint="@string/sujet_de_la_reunion"
+                android:textSize="@dimen/size_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height"
+                android:layout_marginTop="@dimen/margin_text"/>
+
+            <EditText
+                android:id="@+id/edit_meeting_participant"
+                android:hint="@string/participants_a_la_reunion"
+                android:textSize="@dimen/size_text"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_height"
+                android:layout_marginTop="@dimen/margin_text"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
