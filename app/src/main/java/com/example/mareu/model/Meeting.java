@@ -5,19 +5,19 @@ import java.util.List;
 public class Meeting {
 
     private Integer id;
-    private String meetingAvatar;
     private String meetingRoom;
     private String meetingDate;
-    private String meetingHour;
+    private String meetingStartingHour;
+    private String meetingEndingHour;
     private String meetingSubject;
     private List<String> meetingParticipants;
 
-    public Meeting(Integer id, String meetingAvatar, String meetingRoom, String date, String meetingHour, String meetingSubject, List<String> meetingParticipants) {
+    public Meeting(Integer id, String meetingRoom, String date, String meetingStartingHour, String meetingEndingHour, String meetingSubject, List<String> meetingParticipants) {
         this.id = id;
-        this.meetingAvatar = meetingAvatar;
         this.meetingRoom = meetingRoom;
         this.meetingDate = date;
-        this.meetingHour = meetingHour;
+        this.meetingStartingHour = meetingStartingHour;
+        this.meetingEndingHour = meetingEndingHour;
         this.meetingSubject = meetingSubject;
         this.meetingParticipants = meetingParticipants;
     }
@@ -28,14 +28,6 @@ public class Meeting {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getMeetingAvatar() {
-        return meetingAvatar;
-    }
-
-    public void setMeetingAvatar(String meetingAvater) {
-        this.meetingAvatar = meetingAvatar;
     }
 
     public String getMeetingRoom() {
@@ -54,12 +46,20 @@ public class Meeting {
         this.meetingDate = meetingDate;
     }
 
-    public String getMeetingHour() {
-        return meetingHour;
+    public String getMeetingStartingHour() {
+        return meetingStartingHour;
     }
 
-    public void setMeetingHour(String meetingHour) {
-        this.meetingHour = meetingHour;
+    public void setMeetingStartingHour(String meetingHour) {
+        this.meetingStartingHour = meetingHour;
+    }
+
+    public String getMeetingEndingHour() {
+        return meetingEndingHour;
+    }
+
+    public void setMeetingEndingHour(String meetingEndingHour) {
+        this.meetingEndingHour = meetingEndingHour;
     }
 
     public String getMeetingSubject() {
