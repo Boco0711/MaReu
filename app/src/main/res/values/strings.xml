@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MaRéu</string>
+
+    <string name="heure_de_debut">Heure de Debut</string>
+    <string name="heure_de_fin">Heure de Fin</string>
+    <string name="date_de_la_reunion">Date de la Réunion</string>
+    <string name="salle_de_reunion">Salle de la Réunion</string>
+    <string name="sujet_de_la_reunion">Sujet de la Réunion</string>
+    <string name="participants_a_la_reunion">Participants à la Réunion</string>
+    <string name="selectionnez_salle">Selectionnez une salle</string>
+    <string name="selectionnez_date">Selectionnez une date</string>
 </resources>
