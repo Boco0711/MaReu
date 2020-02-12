@@ -8,6 +8,11 @@ public class DummyMeetingApiService implements MeetingApiService{
     private List<Meeting> meetings = DummyMeetingGenerator.generateMeetings();
 
     @Override
+    public void generateMeetings() {
+        meetings = DummyMeetingGenerator.generateMeetings();
+    }
+
+    @Override
     public List<Meeting> getMeetings() {
         return meetings;
     }

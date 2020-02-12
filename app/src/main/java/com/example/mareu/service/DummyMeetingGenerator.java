@@ -6,14 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DummyMeetingGenerator {
-    private static List<String> meetingParticipants = Arrays.asList("Papa", "tom", "toto");
+    private static List<String> meetingParticipants = Arrays.asList("Papa", "tom", "totoooo");
 
     public static List<Meeting> DUMMY_MEETING = Arrays.asList(
-            new Meeting(1, "http://i.pravatar.cc/150?u=a042581f4e29026704e", "Salle 01", "2020/05/01","14h00", "Mario", meetingParticipants),
-            new Meeting(2, "http://i.pravatar.cc/150?u=a042581f4e29026704f", "Salle 02", "2020/04/02", "11h00", "Mario", meetingParticipants),
-            new Meeting(3, "http://i.pravatar.cc/150?u=a042581f4e29026704b", "Salle 05", "2020/08/15", "15h00", "Mario", meetingParticipants),
-            new Meeting(4, "http://i.pravatar.cc/150?u=a042581f4e29026704b", "Salle 03", "2021/01/01", "16h00", "Mario", meetingParticipants),
-            new Meeting(5, "http://i.pravatar.cc/150?u=a042581f4e29026704b", "Salle 06", "2019/12/24", "16h00", "Luigi", meetingParticipants)
+            new Meeting(1,"Salle 01", "2020/02/12","04h00", "04h59", "Mario", meetingParticipants),
+            new Meeting(2,"Salle 01", "2020/02/10", "14h50", "15h30", "Mario", meetingParticipants),
+            new Meeting(3,"Salle 05", "2020/08/15", "15h00", "15h40", "Mario", meetingParticipants),
+            new Meeting(4,"Salle 03", "2021/01/01", "16h00", "16h50", "Mario", meetingParticipants),
+            new Meeting(5,"Salle 06", "2019/12/24", "16h00", "17h00", "Luigi", meetingParticipants)
     );
 
     static List<Meeting> generateMeetings() {
