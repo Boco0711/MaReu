@@ -2,11 +2,14 @@ package com.example.mareu.controller;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,12 +18,14 @@ import com.example.mareu.R;
 import com.example.mareu.events.AddMeetingEvent;
 import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
+import com.example.mareu.service.DummyMeetingGenerator;
 import com.example.mareu.service.MeetingApiService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MeetingByRoomDialog.ExampleDialogListener {
+    private static final String TAG = "Main Activity";
     private RecyclerView mRecyclerView;
 
     private RecyclerViewAdapter recyclerViewAdapter;
@@ -28,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     private List<Meeting> mMeetings;
     ImageButton mAddMeetingButton;
 
-    String filterRoom;
+    String filterString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
 
     private void openDialog() {
         AddMeetingDialog myDialog = new AddMeetingDialog();
-        myDialog.show(getSupportFragmentManager(), "");
+        myDialog.show(getSupportFragmentManager(), "Add a new Meeting in a dialog");
     }
 
     private void setUpRecyclerView() {
@@ -60,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         mRecyclerView.setAdapter(recyclerViewAdapter);
     }
 
+    /**
+     * Set and handle action on the menu
+     * @param menu
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -78,17 +88,23 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 openMeetingByDate();
-                return false;
+                return true;
             }
         });
         return true;
     }
 
+    /**
+     * Create a new MeetingByDateDialog and show it
+     */
     private void openMeetingByDate() {
         MeetingByDateDialog myMeetingByDateDialog = new MeetingByDateDialog();
         myMeetingByDateDialog.show(getSupportFragmentManager(), null);
     }
 
+    /**
+     * Create a new MeetingByRoomDialog and show it
+     */
     private void openMeetingByRoom() {
         MeetingByRoomDialog myMeetingByRoomDialog = new MeetingByRoomDialog();
         myMeetingByRoomDialog.show(getSupportFragmentManager(), null);
@@ -119,20 +135,33 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         initList();
     }
 
+    /**
+     * Init the list of meetings
+     * give the list as param for the RecyclerViewAdapter
+     */
     private void initList() {
         mMeetings = mApiService.getMeetings();
         mRecyclerView.setAdapter(new RecyclerViewAdapter(mMeetings));
     }
 
+    /**
+     * Pass a filter to the recyclerViewAdapter
+     * @param myFilter the filter
+     */
     @Override
-    public void applyTexts(String room) {
-        this.filterRoom = room;
-        recyclerViewAdapter.getFilter().filter(filterRoom);
+    public void applyTexts(String myFilter) {
+        this.filterString = myFilter;
+        recyclerViewAdapter.getFilter().filter(filterString);
     }
 
+    /**
+     * When the configuration of the device change, the list of meeting is reset
+     * @param newConfig the newConfiguration
+     */
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-            mApiService.generateMeetings();
-            mMeetings = mApiService.getMeetings();
+            mApiService = DI.getNewInstanceApiService();
+            initList();
     }
 }
