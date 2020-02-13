@@ -63,6 +63,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
     }
 
+    /**
+     * Bind an image to a room number
+     * @param meetingRoom room number
+     * @return a drawable
+     */
     private int getGoodCircle(String meetingRoom) {
         switch (meetingRoom) {
             case "Salle 01":
