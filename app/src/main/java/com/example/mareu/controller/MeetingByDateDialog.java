@@ -81,6 +81,11 @@ public class MeetingByDateDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * Convert and int to a string
+     * @param myInt to be converted
+     * @return the string created
+     */
     public String convertMyIntToAString(int myInt) {
         String myString = null;
         if (myInt<10) {
