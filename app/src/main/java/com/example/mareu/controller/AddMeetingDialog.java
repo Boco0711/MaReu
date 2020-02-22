@@ -47,7 +47,7 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         service = DI.getMeetingApiService();
         mMeetings = service.getMeetings();
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.add_meeting_dialog, null);
 
@@ -88,7 +88,7 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
      *  And close dialog with dialog.dismiss()
      * @param dialog is An AlertDialog type
      */
-    private void clickOnPositiveButton(final AlertDialog dialog) {
+    public void clickOnPositiveButton(final AlertDialog dialog) {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,17 +112,17 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
                 boolean createANewMeeting = false;
 
                 if (userSubject) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué de sujet pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_SUBJECT, Toast.LENGTH_SHORT).show();
                 } else if (userDate) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué de date pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_DATE, Toast.LENGTH_SHORT).show();
                 } else if (userStartHour) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué d'heure de début pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_BEGIN_HOUR, Toast.LENGTH_SHORT).show();
                 } else if (userEndHour) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué d'heure de fin pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_ENDING_HOUR, Toast.LENGTH_SHORT).show();
                 } else if (userMeeting) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué de participants pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_PARTICIPANTS, Toast.LENGTH_SHORT).show();
                 } else if (userRoom) {
-                    Toast.makeText(getContext(), "Vous n'avez pas indiqué de salle pour cette réunion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.NO_ROOM, Toast.LENGTH_SHORT).show();
                 } else {
                     createANewMeeting = checkIfRoomIsAvailable(room, date, startHour, endHours, subject, listOfParticipants, startingHourNewMeeting, endingHourNewMeeting);
                     if (!createANewMeeting) {

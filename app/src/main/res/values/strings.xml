@@ -9,5 +9,11 @@
     <string name="participants_a_la_reunion">Participants à la Réunion</string>
     <string name="selectionnez_salle">Selectionnez une salle</string>
     <string name="selectionnez_date">Selectionnez une date</string>
-    <string name="TOAST_STRING">Vous n\'avez pas indiqué de sujet pour cette réunion</string>
+
+    <string name="NO_SUBJECT">Vous n\'avez pas indiqué de sujet pour cette réunion</string>
+    <string name="NO_DATE">Vous n\'avez pas indiqué de date pour cette réunion</string>
+    <string name="NO_BEGIN_HOUR">Vous n\'avez pas indiqué d\'heure de début pour cette réunion</string>
+    <string name="NO_ENDING_HOUR">Vous n\'avez pas indiqué d\'heure de fin pour cette réunion</string>
+    <string name="NO_PARTICIPANTS">Vous n\'avez pas indiqué de participants pour cette réunion</string>
+    <string name="NO_ROOM">Vous n\'avez pas indiqué de salle pour cette réunion</string>
 </resources>
