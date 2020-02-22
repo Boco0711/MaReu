@@ -9,4 +9,5 @@
     <string name="participants_a_la_reunion">Participants à la Réunion</string>
     <string name="selectionnez_salle">Selectionnez une salle</string>
     <string name="selectionnez_date">Selectionnez une date</string>
+    <string name="TOAST_STRING">Vous n\'avez pas indiqué de sujet pour cette réunion</string>
 </resources>

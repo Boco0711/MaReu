@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.MainActivity">
+    tools:context=".controller.MainActivity"
+    android:id="@+id/main_activity_contenaire">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/add_meeting_button"
