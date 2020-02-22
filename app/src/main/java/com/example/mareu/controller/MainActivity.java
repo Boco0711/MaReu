@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mApiService  = DI.getMeetingApiService();
+        mApiService  = DI.getNewInstanceApiService();
         mMeetings = mApiService.getMeetings();
         mAddMeetingButton = (ImageButton) findViewById(R.id.add_meeting_button);
         mAddMeetingButton.setOnClickListener(new View.OnClickListener() {
