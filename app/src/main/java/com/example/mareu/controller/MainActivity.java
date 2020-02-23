@@ -22,26 +22,24 @@ import com.example.mareu.service.DummyMeetingGenerator;
 import com.example.mareu.service.MeetingApiService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MeetingByRoomDialog.ExampleDialogListener {
-    private static final String TAG = "Main Activity";
-    private RecyclerView mRecyclerView;
 
     private RecyclerViewAdapter recyclerViewAdapter;
-    private MeetingApiService mApiService;
+    protected MeetingApiService mApiService = DI.getNewInstanceApiService();
     private List<Meeting> mMeetings;
-    ImageButton mAddMeetingButton;
-
+    private final List<Meeting> mMeetingsFinal = new ArrayList<>(mApiService.getMeetings());
     String filterString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mApiService  = DI.getNewInstanceApiService();
         mMeetings = mApiService.getMeetings();
-        mAddMeetingButton = (ImageButton) findViewById(R.id.add_meeting_button);
+        ImageButton mAddMeetingButton = (ImageButton) findViewById(R.id.add_meeting_button);
         mAddMeetingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     }
 
     private void setUpRecyclerView() {
-        mRecyclerView = findViewById(R.id.recycler_view);
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(mMeetings);
+        recyclerViewAdapter = new RecyclerViewAdapter(mMeetings, this);
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(recyclerViewAdapter);
@@ -125,23 +123,23 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {
         mApiService.deleteMeeting(event.meeting);
-        mMeetings= mApiService.getMeetings();
-        initList();
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Subscribe
     public void onAddMeeting(AddMeetingEvent event) {
         mApiService.addMeeting(event.meeting);
-        initList();
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
      * Init the list of meetings
      * give the list as param for the RecyclerViewAdapter
      */
-    private void initList() {
-        mMeetings = mApiService.getMeetings();
-        mRecyclerView.setAdapter(new RecyclerViewAdapter(mMeetings));
+    private void initList(List<Meeting> meetings) {
+        mMeetings.clear();
+        mMeetings.addAll(meetings);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -161,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-            mApiService = DI.getNewInstanceApiService();
-            initList();
+            initList(mMeetingsFinal);
     }
 }
