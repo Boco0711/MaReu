@@ -24,7 +24,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MeetingByRoomDialog.ExampleDialogListener {
 
-    private RecyclerView mRecyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     protected MeetingApiService mApiService = DI.getNewInstanceApiService();
     private List<Meeting> mMeetings;
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMeetings = mApiService.getMeetings();
-        ImageButton mAddMeetingButton = (ImageButton) findViewById(R.id.add_meeting_button);
+        ImageButton mAddMeetingButton = findViewById(R.id.add_meeting_button);
         mAddMeetingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     }
 
     private void setUpRecyclerView(List<Meeting> meetings) {
-        mRecyclerView = findViewById(R.id.recycler_view);
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewAdapter = new RecyclerViewAdapter(mMeetings, this);
+        recyclerViewAdapter = new RecyclerViewAdapter(meetings, this);
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(recyclerViewAdapter);
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
 
     /**
      * Set and handle action on the menu
-     * @param menu
+     * @param menu the menu inflated
      * @return boolean
      */
     @Override
