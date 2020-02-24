@@ -120,7 +120,7 @@ public class MareuInstrumentedTest {
                                 3)));
         appCompatButton.perform(scrollTo(), click());
 
-        onView(withText(R.string.TOAST_STRING)).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText(R.string.NO_SUBJECT)).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test
