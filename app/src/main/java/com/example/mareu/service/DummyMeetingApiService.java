@@ -21,4 +21,13 @@ public class DummyMeetingApiService implements MeetingApiService{
     public void deleteMeeting(Meeting meeting) {
         meetings.remove(meeting);
     }
+
+    @Override
+    public Meeting getMeetingById(int i) {
+        for (Meeting meeting : meetings) {
+            if (meeting.getId() == i)
+                return meeting;
+        }
+        return null;
+    }
 }
