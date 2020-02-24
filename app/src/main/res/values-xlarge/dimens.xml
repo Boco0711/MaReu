@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="size_text">40sp</dimen>
+    <dimen name="size_text">30sp</dimen>
     <dimen name="text_height">60dp</dimen>
     <dimen name="margin_text">40dp</dimen>
 
     <dimen name="padding_scrollview">100dp</dimen>
 
-    <dimen name="size_image_height">100dp</dimen>
+    <dimen name="size_image_height">80dp</dimen>
     <dimen name="size_image_width">@dimen/size_image_height</dimen>
-    <dimen name="margin_image_left">30dp</dimen>
-    <dimen name="margin_text_left">140dp</dimen>
+    <dimen name="margin_image_left">15dp</dimen>
+    <dimen name="margin_text_left">105dp</dimen>
 
 
-    <dimen name="size_button_height">100dp</dimen>
+    <dimen name="size_button_height">80dp</dimen>
     <dimen name="size_button_width">@dimen/size_button_height</dimen>
 
-    <dimen name="margin_button_right">30dp</dimen>
-    <dimen name="margin_text_right">130dp</dimen>
+    <dimen name="margin_button_right">15dp</dimen>
+    <dimen name="margin_text_right">95dp</dimen>
 
 
 </resources>

@@ -8,14 +8,14 @@
 
     <dimen name="size_image_height">40dp</dimen>
     <dimen name="size_image_width">@dimen/size_image_height</dimen>
-    <dimen name="margin_image_left">8dp</dimen>
-    <dimen name="margin_text_left">58dp</dimen>
+    <dimen name="margin_image_left">5dp</dimen>
+    <dimen name="margin_text_left">55dp</dimen>
 
     <dimen name="size_button_height">30dp</dimen>
     <dimen name="size_button_width">@dimen/size_button_height</dimen>
 
-    <dimen name="margin_button_right">15dp</dimen>
-    <dimen name="margin_text_right">45dp</dimen>
+    <dimen name="margin_button_right">5dp</dimen>
+    <dimen name="margin_text_right">35dp</dimen>
 
 
 
