@@ -2,14 +2,12 @@ package com.example.mareu.controller;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,16 +16,15 @@ import com.example.mareu.R;
 import com.example.mareu.events.AddMeetingEvent;
 import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
-import com.example.mareu.service.DummyMeetingGenerator;
 import com.example.mareu.service.MeetingApiService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MeetingByRoomDialog.ExampleDialogListener {
 
+    private RecyclerView mRecyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     protected MeetingApiService mApiService = DI.getNewInstanceApiService();
     private List<Meeting> mMeetings;
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
                 openDialog();
             }
         });
-        setUpRecyclerView();
+        setUpRecyclerView(mMeetings);
     }
 
     private void openDialog() {
@@ -54,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         myDialog.show(getSupportFragmentManager(), "Add a new Meeting in a dialog");
     }
 
-    private void setUpRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
+    private void setUpRecyclerView(List<Meeting> meetings) {
+        mRecyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewAdapter = new RecyclerViewAdapter(mMeetings, this);
 
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        MenuItem searchMeetingByRoom = menu.findItem(R.id.trier_par_salle);
+        MenuItem searchMeetingByRoom = menu.findItem(R.id.filtrer_par_salle);
         searchMeetingByRoom.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
             }
         });
 
-        MenuItem searchMeetingByDate = menu.findItem(R.id.trier_par_date);
+        MenuItem searchMeetingByDate = menu.findItem(R.id.filtrer_par_date);
         searchMeetingByDate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -136,10 +133,10 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
      * Init the list of meetings
      * give the list as param for the RecyclerViewAdapter
      */
-    private void initList(List<Meeting> meetings) {
+    private void initList() {
         mMeetings.clear();
-        mMeetings.addAll(meetings);
-        recyclerViewAdapter.notifyDataSetChanged();
+        mMeetings.addAll(mMeetingsFinal);
+        setUpRecyclerView(mMeetings);
     }
 
     /**
@@ -157,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
      * @param newConfig the newConfiguration
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-            initList(mMeetingsFinal);
+        initList();
     }
 }
