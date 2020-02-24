@@ -1,5 +1,6 @@
 package com.example.mareu.controller;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,9 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyRecyclerViewHolder> implements Filterable {
     private List<Meeting> meetings;
-    private List<Meeting> meetingsFull;
+    private final List<Meeting> meetingsFiltered;
+    private final List<Meeting> meetingsFull;
+    private Context mContext;
 
     class MyRecyclerViewHolder extends RecyclerView.ViewHolder{
         ImageView mImageView;
@@ -29,16 +32,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         MyRecyclerViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.image);
-            mTextView1 = (TextView) itemView.findViewById(R.id.image_name);
-            mTextView2 = (TextView) itemView.findViewById(R.id.meeting_participants);
-            mImageButton = (ImageButton) itemView.findViewById(R.id.delete_meeting);
+            mImageView = itemView.findViewById(R.id.image);
+            mTextView1 = itemView.findViewById(R.id.image_name);
+            mTextView2 = itemView.findViewById(R.id.meeting_participants);
+            mImageButton = itemView.findViewById(R.id.delete_meeting);
         }
     }
 
-    RecyclerViewAdapter(List<Meeting> meetingsList) {
+    RecyclerViewAdapter(List<Meeting> meetingsList, Context context) {
         this.meetings = meetingsList;
         meetingsFull = new ArrayList<>(meetingsList);
+        meetingsFiltered = new ArrayList<>();
+        this.mContext = context;
     }
 
     @NonNull
@@ -58,7 +63,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new DeleteMeetingEvent(meetings.get(position)));
+                meetingsFull.remove(((MainActivity)mContext).mApiService.getMeetingById(meetings.get(position).getId()));
+                EventBus.getDefault().post(new DeleteMeetingEvent(meetings.get(position).getId()));
             }
         });
     }
@@ -103,22 +109,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Filter meetingFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Meeting> filteredList = new ArrayList<>();
+            meetingsFiltered.clear();
             if (constraint == null || constraint.length() == 0 || constraint == "Toutes") {
-                filteredList.addAll(meetingsFull);
+                meetingsFiltered.addAll(meetingsFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (Meeting meeting : meetingsFull) {
                     if (meeting.getMeetingRoom().toLowerCase().contains(filterPattern) || meeting.getMeetingDate().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(meeting);
+                        meetingsFiltered.add(meeting);
                     }
                 }
             }
             FilterResults results = new FilterResults();
-            results.values = filteredList;
+            results.values = meetingsFiltered;
             return results;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             meetings.clear();
