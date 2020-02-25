@@ -7,17 +7,17 @@
     tools:context=".controller.MainActivity"
     android:id="@+id/main_activity_contenaire">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/add_meeting_button"
-        android:layout_width="@dimen/size_button_width"
-        android:layout_height="@dimen/size_button_height"
-        android:elevation="2dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/add_meeting_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="@dimen/margin_button_right"
-        android:layout_marginRight="@dimen/margin_button_right"
-        android:src="@drawable/ic_add"
-        android:background="@drawable/red_circle"
+        android:layout_marginBottom="@dimen/margin_adding_button_bottom"
+        android:layout_marginRight="@dimen/margin_adding_button_right"
+        android:backgroundTint="#FF0000"
         />
 
     <androidx.recyclerview.widget.RecyclerView
