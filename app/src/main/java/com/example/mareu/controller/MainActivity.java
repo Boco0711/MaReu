@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +16,7 @@ import com.example.mareu.events.AddMeetingEvent;
 import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMeetings = mApiService.getMeetings();
-        ImageButton mAddMeetingButton = findViewById(R.id.add_meeting_button);
+        FloatingActionButton mAddMeetingButton = findViewById(R.id.add_meeting_button);
         mAddMeetingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
     }
 
     private void openDialog() {
-        AddMeetingDialog myDialog = new AddMeetingDialog();
+        AddMeetingDialog myDialog = new AddMeetingDialog(mMeetings);
         myDialog.show(getSupportFragmentManager(), "Add a new Meeting in a dialog");
     }
 
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
         RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewAdapter = new RecyclerViewAdapter(meetings, this);
-
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(recyclerViewAdapter);
     }
@@ -76,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements MeetingByRoomDial
                 return true;
             }
         });
-
         MenuItem searchMeetingByDate = menu.findItem(R.id.filtrer_par_date);
         searchMeetingByDate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
