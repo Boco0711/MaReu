@@ -13,10 +13,5 @@
     <string name="filtrer_par_salle">Filtrer par salle</string>
     <string name="filtrer_par_date">Filtrer par date</string>
 
-    <string name="NO_SUBJECT">Vous n\'avez pas indiqué de sujet pour cette réunion</string>
-    <string name="NO_DATE">Vous n\'avez pas indiqué de date pour cette réunion</string>
-    <string name="NO_BEGIN_HOUR">Vous n\'avez pas indiqué d\'heure de début pour cette réunion</string>
-    <string name="NO_ENDING_HOUR">Vous n\'avez pas indiqué d\'heure de fin pour cette réunion</string>
-    <string name="NO_PARTICIPANTS">Vous n\'avez pas indiqué de participants pour cette réunion</string>
-    <string name="NO_ROOM">Vous n\'avez pas indiqué de salle pour cette réunion</string>
+    <string name="NOT_ALL_FIELD_FILLED_CORRECTLY">Un ou plusieurs champs ne sont pas correctement remplis</string>
 </resources>
