@@ -46,22 +46,37 @@
                 android:layout_height="@dimen/text_height"
                 android:layout_marginTop="@dimen/margin_text"/>
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_meeting_subject"
                 android:hint="@string/sujet_de_la_reunion"
-                android:textSize="@dimen/size_text"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_height"
-                android:layout_marginTop="@dimen/margin_text"/>
+                android:layout_height="wrap_content"
+                >
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_meeting_subject_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textSize="@dimen/size_text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_meeting_participant"
                 android:hint="@string/participants_a_la_reunion"
-                android:textSize="@dimen/size_text"
-                android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_height"
-                android:layout_marginTop="@dimen/margin_text"/>
+                android:layout_height="wrap_content"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_meeting_participant_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textSize="@dimen/size_text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>
