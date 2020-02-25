@@ -17,6 +17,8 @@
     <dimen name="margin_button_right">5dp</dimen>
     <dimen name="margin_text_right">35dp</dimen>
 
+    <dimen name="margin_adding_button_bottom">15dp</dimen>
+    <dimen name="margin_adding_button_right">10dp</dimen>
 
 
 
