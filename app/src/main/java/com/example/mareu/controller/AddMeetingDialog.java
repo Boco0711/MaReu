@@ -8,20 +8,18 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import com.example.mareu.DI.DI;
 import com.example.mareu.R;
 import com.example.mareu.events.AddMeetingEvent;
 import com.example.mareu.model.Meeting;
-import com.example.mareu.service.MeetingApiService;
+import com.google.android.material.textfield.TextInputLayout;
 import org.greenrobot.eventbus.EventBus;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -29,24 +27,24 @@ import java.util.List;
 import java.util.Objects;
 
 public class AddMeetingDialog extends AppCompatDialogFragment {
-    private MeetingApiService service;
     private List<Meeting> mMeetings;
-
     private TextView mEditMeetingRoom;
     private TextView mEditMeetingDate;
     private TextView mEditMeetingStartHour;
     private TextView mEditMeetingEndHour;
-    private EditText mEditMeetingSubject;
-    private EditText mEditMeetingParticipants;
+    private TextInputLayout mEditMeetingSubject;
+    private TextInputLayout mEditMeetingParticipants;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListenerBeginningMeeting;
     private TimePickerDialog.OnTimeSetListener mTimeSetListenerEndingMeeting;
 
+    public AddMeetingDialog(List<Meeting> mMeetings) {
+        this.mMeetings = mMeetings;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        service = DI.getMeetingApiService();
-        mMeetings = service.getMeetings();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.add_meeting_dialog, null);
@@ -73,7 +71,6 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
         clickOnPositiveButton(dialog);
         getMeetingRoom();
         getMeetingDate();
@@ -83,47 +80,34 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
     }
 
     /**
-     *  Check if all field are filled
-     *  Then call the checkIfRoomIsAvailable with all the param of the new meeting
-     *  And close dialog with dialog.dismiss()
+     * Check if all field are filled
+     * Then call the checkIfRoomIsAvailable with all the param of the new meeting
+     * And close dialog with dialog.dismiss()
+     *
      * @param dialog is An AlertDialog type
      */
     public void clickOnPositiveButton(final AlertDialog dialog) {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String subject = mEditMeetingSubject.getText().toString();
+                boolean createANewMeeting;
+                String subject = mEditMeetingSubject.getEditText().getText().toString();
                 String date = mEditMeetingDate.getText().toString();
                 String startHour = mEditMeetingStartHour.getText().toString();
                 String endHours = mEditMeetingEndHour.getText().toString();
                 String room = mEditMeetingRoom.getText().toString();
-                String participants = mEditMeetingParticipants.getText().toString();
+                String participants = mEditMeetingParticipants.getEditText().getText().toString();
                 int startingHourNewMeeting = convertMyStringToAnInt(startHour.toLowerCase());
                 int endingHourNewMeeting = convertMyStringToAnInt(endHours.toLowerCase());
-                String[] array = participants.split(",");
-                List<String> listOfParticipants = Arrays.asList(array);
+                List<String> listOfParticipants = Arrays.asList(participants.split(","));
 
-                boolean userSubject = TextUtils.isEmpty(mEditMeetingSubject.getText().toString().trim());
-                boolean userDate = TextUtils.isEmpty(mEditMeetingDate.getText().toString().trim());
-                boolean userStartHour = TextUtils.isEmpty(mEditMeetingStartHour.getText().toString().trim());
-                boolean userEndHour = TextUtils.isEmpty(mEditMeetingEndHour.getText().toString().trim());
-                boolean userRoom = TextUtils.isEmpty(mEditMeetingRoom.getText().toString().trim());
-                boolean userMeeting = TextUtils.isEmpty(mEditMeetingParticipants.getText().toString().trim());
-                boolean createANewMeeting = false;
+                String[] allStringArray = {subject, date, startHour, endHours, room};
+                boolean allStringAreFilled = checkString(allStringArray);
+                boolean userMeeting = validateEmail();
 
-                if (userSubject) {
-                    Toast.makeText(getContext(), R.string.NO_SUBJECT, Toast.LENGTH_SHORT).show();
-                } else if (userDate) {
-                    Toast.makeText(getContext(), R.string.NO_DATE, Toast.LENGTH_SHORT).show();
-                } else if (userStartHour) {
-                    Toast.makeText(getContext(), R.string.NO_BEGIN_HOUR, Toast.LENGTH_SHORT).show();
-                } else if (userEndHour) {
-                    Toast.makeText(getContext(), R.string.NO_ENDING_HOUR, Toast.LENGTH_SHORT).show();
-                } else if (userMeeting) {
-                    Toast.makeText(getContext(), R.string.NO_PARTICIPANTS, Toast.LENGTH_SHORT).show();
-                } else if (userRoom) {
-                    Toast.makeText(getContext(), R.string.NO_ROOM, Toast.LENGTH_SHORT).show();
-                } else {
+                if (!allStringAreFilled)
+                    Toast.makeText(getContext(), R.string.NOT_ALL_FIELD_FILLED_CORRECTLY, Toast.LENGTH_SHORT).show();
+                if (allStringAreFilled && userMeeting) {
                     createANewMeeting = checkIfRoomIsAvailable(room, date, startHour, endHours, subject, listOfParticipants, startingHourNewMeeting, endingHourNewMeeting);
                     if (!createANewMeeting) {
                         checkIfRoomIsAvailable(room, date, startHour, endHours, subject, listOfParticipants, startingHourNewMeeting, endingHourNewMeeting);
@@ -135,12 +119,38 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
         });
     }
 
+    private boolean checkString(String[] toCheck) {
+        for (String stringToCheck :toCheck) {
+            if (stringToCheck.isEmpty())
+                return false;
+            }
+        return true;
+    }
+
+    private boolean validateEmail() {
+        String emailInput = mEditMeetingParticipants.getEditText().getText().toString().trim();
+        String[] array = emailInput.split(",");
+        if (emailInput.isEmpty()) {
+            mEditMeetingParticipants.setError("Le champ ne peut être vide");
+            return false;
+        } else {
+            for (String email : array) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+                    mEditMeetingParticipants.setError("Vous devez saisir des adresses email valide");
+                    return false;
+                }
+            }
+            mEditMeetingParticipants.setError(null);
+            return true;
+        }
+    }
+
     /**
      * Check if the room is taken at the time requested.
      * If one meeting existing already use the room at the date and hour requested it say it to the user
      * If not create the new meeting and return a boolean
      */
-    private boolean checkIfRoomIsAvailable(String room, String date, String startHour, String endHours, String subject, List<String> listOfParticipants, int startingHourNewMeeting, int endingHourNewMeeting ) {
+    private boolean checkIfRoomIsAvailable(String room, String date, String startHour, String endHours, String subject, List<String> listOfParticipants, int startingHourNewMeeting, int endingHourNewMeeting) {
         boolean isMeetingOkay = true;
         for (Meeting meeting : mMeetings) {
             if (meeting.getMeetingDate().toLowerCase().equals(date.toLowerCase()) && meeting.getMeetingRoom().toLowerCase().equals(room.toLowerCase())) {
@@ -204,10 +214,10 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month+1;
+                month = month + 1;
                 String dayIs = convertMyIntToAString(day);
                 String monthIs = convertMyIntToAString(month);
-                String date = year+"/"+monthIs+"/"+dayIs;
+                String date = year + "/" + monthIs + "/" + dayIs;
                 mEditMeetingDate.setText(date);
             }
         };
@@ -234,7 +244,7 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 String hourIs = convertMyIntToAString(hour);
                 String minuteIs = convertMyIntToAString(minute);
-                String hourTime = hourIs+"h"+minuteIs;
+                String hourTime = hourIs + "h" + minuteIs;
                 mEditMeetingStartHour.setText(hourTime);
             }
         };
@@ -261,7 +271,7 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 String hourIs = convertMyIntToAString(hour);
                 String minuteIs = convertMyIntToAString(minute);
-                String hourTime = hourIs+"h"+minuteIs;
+                String hourTime = hourIs + "h" + minuteIs;
                 mEditMeetingEndHour.setText(hourTime);
             }
         };
@@ -269,21 +279,23 @@ public class AddMeetingDialog extends AppCompatDialogFragment {
 
     /**
      * Convert an int to a string. If the int is smaller than 10 add a 0 before hiim in the string
+     *
      * @param myInt the int converted
      * @return the string created
      */
     private String convertMyIntToAString(int myInt) {
         String myString;
-        if (myInt<10) {
-            myString = "0"+myInt;
+        if (myInt < 10) {
+            myString = "0" + myInt;
         } else {
-            myString = ""+myInt;
+            myString = "" + myInt;
         }
         return myString;
     }
 
     /**
      * Convert a String to an int, remove the h of the string.
+     *
      * @param myString the string to be converted
      * @return the int created
      */
