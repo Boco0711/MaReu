@@ -6,16 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
+
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.Root;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+
 import com.example.mareu.R;
 import com.example.mareu.service.DummyMeetingGenerator;
 import com.example.mareu.utils.RecyclerViewItemCountAssertion;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -23,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -30,9 +35,13 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -120,7 +129,7 @@ public class MareuInstrumentedTest {
                                 3)));
         appCompatButton.perform(scrollTo(), click());
 
-        onView(withText(R.string.NO_SUBJECT)).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText(R.string.NOT_ALL_FIELD_FILLED_CORRECTLY)).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -210,32 +219,8 @@ public class MareuInstrumentedTest {
                         isDisplayed()));
         appCompatButton3.perform(click());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_meeting_subject),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                4)));
-        appCompatEditText.perform(scrollTo(), replaceText("Un Sujet de Réunion"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_meeting_participant),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                5)));
-        appCompatEditText2.perform(scrollTo(), replaceText("DesPa"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.edit_meeting_participant), withText("DesPa"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                5)));
-        appCompatEditText3.perform(pressImeActionButton());
+        onView(withId(R.id.edit_meeting_subject_edit_text)).perform(replaceText("Un Sujet de Réunion"), closeSoftKeyboard(), pressImeActionButton());
+        onView(withId(R.id.edit_meeting_participant_edit_text)).perform(replaceText("DesPa@hotmail.fr"), closeSoftKeyboard(), pressImeActionButton());
 
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(android.R.id.button1), withText("Ajouter"),
@@ -249,7 +234,62 @@ public class MareuInstrumentedTest {
         ViewInteraction recyclerView = onView(allOf(ViewMatchers.withId(R.id.recycler_view),
                 withParent(allOf(withId(R.id.main_activity_contenaire))),
                 isDisplayed()));
-        recyclerView.check(RecyclerViewItemCountAssertion.withItemCount(meetingInList+1));
+        recyclerView.check(RecyclerViewItemCountAssertion.withItemCount(meetingInList + 1));
+    }
+
+    @Test
+    public void filterTest() {
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.item1), withContentDescription("Filtre"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.action_bar),
+                                        1),
+                                0),
+                        isDisplayed()));
+        actionMenuItemView.perform(click());
+
+        ViewInteraction appCompatTextView = onView(
+                allOf(withId(R.id.title), withText("Filtrer par salle"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatTextView.perform(click());
+
+        ViewInteraction appCompatTextView2 = onView(
+                allOf(withId(R.id.room_selected),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.custom),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatTextView2.perform(click());
+
+        DataInteraction appCompatTextView3 = onData(anything())
+                .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
+                        childAtPosition(
+                                withClassName(is("android.widget.FrameLayout")),
+                                0)))
+                .atPosition(0);
+        appCompatTextView3.perform(click());
+
+        ViewInteraction appCompatButton = onView(
+                allOf(withId(android.R.id.button1), withText("Filtrer"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                3)));
+        appCompatButton.perform(scrollTo(), click());
+
+        ViewInteraction recyclerView = onView(allOf(ViewMatchers.withId(R.id.recycler_view),
+                withParent(allOf(withId(R.id.main_activity_contenaire))),
+                isDisplayed()));
+        recyclerView.check(RecyclerViewItemCountAssertion.withItemCount(1));
     }
 
     private static Matcher<View> childAtPosition(
