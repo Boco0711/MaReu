@@ -56,7 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyRecyclerViewHolder holder, final int position) {
         Meeting currentMeeting = meetings.get(position);
-        String meetingDetails = currentMeeting.getMeetingRoom() + " - " + currentMeeting.getMeetingStartingHour() + " - " + currentMeeting.getMeetingSubject();
+        String meetingDetails = currentMeeting.getMeetingSubject() + " - " + currentMeeting.getMeetingStartingHour() + " - " + currentMeeting.getMeetingRoom();
         holder.mImageView.setImageResource(getGoodCircle(currentMeeting.getMeetingRoom()));
         holder.mTextView1.setText(meetingDetails);
         holder.mTextView2.setText(currentMeeting.getMeetingParticipants().toString().replace("[", "").replace("]", ""));
@@ -64,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 meetingsFull.remove(((MainActivity)mContext).mApiService.getMeetingById(meetings.get(position).getId()));
-                EventBus.getDefault().post(new DeleteMeetingEvent(meetings.get(position).getId()));
+                EventBus.getDefault().post(new DeleteMeetingEvent(((MainActivity)mContext).mApiService.getMeetingById(meetings.get(position).getId())));
             }
         });
     }
@@ -109,6 +109,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Filter meetingFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            checkIfMeetingsFullContainsAllMeetings();
             meetingsFiltered.clear();
             if (constraint == null || constraint.length() == 0 || constraint == "Toutes") {
                 meetingsFiltered.addAll(meetingsFull);
@@ -133,4 +134,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             notifyDataSetChanged();
         }
     };
+
+    private void checkIfMeetingsFullContainsAllMeetings() {
+        if (meetings.size() > meetingsFull.size()){
+            meetingsFull.clear();
+            meetingsFull.addAll(meetings);
+        }
+    }
 }
